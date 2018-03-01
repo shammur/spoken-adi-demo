@@ -61,7 +61,14 @@ run make; IT WILL TAKE TIME
 ```bash
 make [-j n]  # please change n to the number of cores you want to use
 ```
-
+After building kaldi tools, change directory to `kaldi/src/` and do the same thing. Note that kaldi tools need to be built first
+```bash
+cd kaldi/src/
+./configure --shared
+make clean [-j n] 
+make depend [-j n] 
+make [-j n]  # please change n to the number of cores you want to use
+```
 
 
 
