@@ -56,3 +56,12 @@ and then run the following line to check the requirments to install Kaldi tools 
 extras/check_dependencies.sh
 ```
 .. and install them if needed
+
+run make; IT WILL TAKE TIME 
+```bash
+make [-j n]  # please change n to the number of cores you want to use
+```
+
+
+
+
