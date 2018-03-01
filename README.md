@@ -43,3 +43,16 @@ sudo -H pip install tornado
 sudo -H pip install ws4py==0.3.2
 sudo -H pip install pyyaml
 ```
+Clone the Kaldi as follows:
+```bash
+git clone https://github.com/kaldi-asr/kaldi.git
+```
+Change directory to
+```bash
+cd kaldi/tools/
+```
+and then run the following line to check the requirments to install Kaldi tools are all available
+```bash
+extras/check_dependencies.sh
+```
+.. and install them if needed
