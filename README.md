@@ -43,6 +43,7 @@ sudo -H pip install tornado
 sudo -H pip install ws4py==0.3.2
 sudo -H pip install pyyaml
 ```
+### Kaldi Installation
 Clone the Kaldi as follows:
 ```bash
 git clone https://github.com/kaldi-asr/kaldi.git
@@ -69,6 +70,43 @@ make clean [-j n]
 make depend [-j n] 
 make [-j n]  # please change n to the number of cores you want to use
 ```
+### Gst-kaldi-nnet2-online Installation
+The DNN-based online decoder requires a newer GStreamer plugin that is not in the Kaldi codebase and has to be compiled seperately. It's available at https://github.com/alumae/gst-kaldi-nnet2-online. 
 
+Clone it under and then change directory to the `src` directory under the cloned directory
+```bash
+git clone https://github.com/alumae/gst-kaldi-nnet2-online.git
+cd gst-kaldi-nnet2-online/src
+```
+
+Install the following
+```bash
+sudo apt-get install gstreamer1.0-plugins-bad  gstreamer1.0-plugins-base gstreamer1.0-plugins-good  gstreamer1.0-pulseaudio  gstreamer1.0-plugins-ugly  gstreamer1.0-tools libgstreamer1.0-dev
+sudo apt-get install libjansson-dev
+```
+
+Edit the `Makefile` in the directory and change the variable `KALDI_ROOT?=` poinring to the kaldi home directory as follows
+```bash
+vim Makefile
+KALDI_ROOT?=/path/to/kaldi/home/directory
+```
+
+and then save and run
+```bash
+make depend
+KALDI_ROOT=/home/disooqi/kaldi make # IT WILL TAKE TIME 
+```
+
+
+wget -O /tmp/model.tar.gz https://qcristore.blob.core.windows.net/public/asrlive/models/arabic/nnet3sac.tar.gz
+
+# untar it to /opt/model
+sudo mkdir -m 777 /opt/model
+tar xzvf /tmp/model.tar.gz -C /opt/model
+
+# In the worker side
+# out-dir: /home/qcri/spool/asr/nnet3sac
+sudo mkdir -p -m 777 /var/spool/asr/nnet3sac
+```
 
 
