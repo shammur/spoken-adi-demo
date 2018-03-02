@@ -16,7 +16,7 @@ Installation
 
 *NB!*: If you want to use virtual environment it is recommended to create it with --system-site-packages flag so that it can use Python bindings
 
-*NB!*: The server doesn't work quite correctly with ws4py 0.3.5 because of a bug I reported here: https://github.com/Lawouach/WebSocket-for-Python/issues/152.
+*NB!*: The server doesn't work quite correctly with ws4py 0.3.5 because of a bug that has been reported here: https://github.com/Lawouach/WebSocket-for-Python/issues/152.
 * Python 2.7
 * In addition, you need Python 2.x bindings for gobject-introspection libraries, provided by the `python-gi`
 package on Debian and Ubuntu.
