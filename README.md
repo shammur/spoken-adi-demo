@@ -107,8 +107,7 @@ and then untar it to `/opt/model`
 sudo mkdir -m 777 /opt/model
 tar xzvf /tmp/model.tar.gz -C /opt/model
 ```
-
-Change the value of `out-dir` of the `model.yaml` to be `out-dir: /home/qcri/spool/asr/nnet3sac` and create the directory as follows:
+create the following dir
 ```bash
 sudo mkdir -p -m 777 /var/spool/asr/nnet3sac
 ```
