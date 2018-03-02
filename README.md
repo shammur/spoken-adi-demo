@@ -120,5 +120,19 @@ change directory to the directory you just cloned, and the run server as follows
 ```bash
 python kaldigstserver/master_server.py --port=8888 [--certfile=] [--keyfile=]
 ```
+### Runnning
+```bash
+export GST_PLUGIN_PATH=/home/disooqi/gst-kaldi-nnet2-online/src
+cd kaldi-gstreamer-server
+python kaldigstserver/worker.py -u ws://localhost:8888/worker/ws/speech -c /opt/model/model.yaml
+````
+Running Using SSL
+----------------
+1) pass server parameters
+2) run worker with `wss://` instead of `ws://`
+3) run client with `wss://` instead of `ws://`
 
 
+```bash
+git clone https://github.com/Kaljurand/dictate.js.git
+```
