@@ -73,7 +73,7 @@ make [-j n]  # please change n to the number of cores you want to use
 ### Gst-kaldi-nnet2-online Installation
 The DNN-based online decoder requires a newer GStreamer plugin that is not in the Kaldi codebase and has to be compiled seperately. It's available at https://github.com/alumae/gst-kaldi-nnet2-online. 
 
-Clone it under and then change directory to the `src` directory under the cloned directory
+Clone it and then change directory to the `src` directory under the cloned directory
 ```bash
 git clone https://github.com/alumae/gst-kaldi-nnet2-online.git
 cd gst-kaldi-nnet2-online/src
@@ -96,17 +96,30 @@ and then save and run
 make depend
 KALDI_ROOT=/home/disooqi/kaldi make # IT WILL TAKE TIME 
 ```
-
-
+### Seting up the Model
+Download the model as
+```bash
 wget -O /tmp/model.tar.gz https://qcristore.blob.core.windows.net/public/asrlive/models/arabic/nnet3sac.tar.gz
+```
 
-# untar it to /opt/model
+and then untar it to `/opt/model`
+```bash
 sudo mkdir -m 777 /opt/model
 tar xzvf /tmp/model.tar.gz -C /opt/model
+```
 
-# In the worker side
-# out-dir: /home/qcri/spool/asr/nnet3sac
+Change the value of `out-dir` of the `model.yaml` to be `out-dir: /home/qcri/spool/asr/nnet3sac` and create the directory as follows:
+```bash
 sudo mkdir -p -m 777 /var/spool/asr/nnet3sac
+```
+### Install the Kaldi Gstreamer Server
+clone 
+```
+git clone https://github.com/alumae/kaldi-gstreamer-server.git
+```
+change directory to the directory you just cloned, and the run server as follows:
+```bash
+python kaldigstserver/master_server.py --port=8888 [--certfile=] [--keyfile=]
 ```
 
 
