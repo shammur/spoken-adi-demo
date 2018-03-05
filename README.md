@@ -42,6 +42,8 @@ source <path/to/your/env>/bin/activate
 sudo -H pip install tornado
 sudo -H pip install ws4py==0.3.2
 sudo -H pip install pyyaml
+sudo -H pip install numpy
+sudo -H pip install tensorflow
 ```
 ### Kaldi Installation
 Clone the Kaldi as follows:
