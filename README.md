@@ -96,7 +96,7 @@ and then save and run
 make depend
 KALDI_ROOT=/home/disooqi/kaldi make # IT WILL TAKE TIME 
 ```
-### Seting up the Model
+### Setting up the Model
 Download the model as
 ```bash
 wget -O /tmp/model.tar.gz  crowdsource.cloudapp.net/models/Arabic/20180304/nnet3sac.tar.gz
@@ -112,9 +112,21 @@ create the following dir
 ```bash
 sudo mkdir -p -m 777 /var/spool/asr/nnet3sac
 ```
-### Install the Kaldi Gstreamer Server
-clone 
+
+### Setting up Full Post Processor (this repo)
+1) clone this repo
 ```
+git clone https://github.com/disooqi/qmdis-post-processor-full.git
+```
+2) make sure that `dialectid_post_processor.py` module and its parent directories have execution permissions
+3) edit `/opt/model/model.yaml` and assign the path to `dialectid_post_processor.py` to the variable `full-post-processor:` as
+    follows and append it to the file:
+```yaml
+full-post-processor: /the/path/to/dialectid_post_processor.py`
+```
+### Setting up Kaldi Gstreamer Server
+clone 
+```bash
 git clone https://github.com/alumae/kaldi-gstreamer-server.git
 ```
 change directory to the directory you just cloned, and the run server as follows:
