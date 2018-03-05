@@ -99,8 +99,8 @@ KALDI_ROOT=/home/disooqi/kaldi make # IT WILL TAKE TIME
 ### Seting up the Model
 Download the model as
 ```bash
-wget -O /tmp/model.tar.gz https://qcristore.blob.core.windows.net/public/asrlive/models/arabic/nnet3sac.tar.gz
-crowdsource.cloudapp.net/models/Arabic/20180304/nnet3sac.tar.gz
+wget -O /tmp/model.tar.gz  crowdsource.cloudapp.net/models/Arabic/20180304/nnet3sac.tar.gz
+wget -O /tmp/model.tar.gz  https://qcristore.blob.core.windows.net/public/asrlive/models/arabic/nnet3sac.tar.gz
 ```
 
 and then untar it to `/opt/model`
