@@ -2,6 +2,7 @@
 import numpy as np
 import tensorflow as tf
 import codecs
+import os
 
 __author__ = 'Mohamed Eldesouki'
 __date__ = '28 Nov 2017'
@@ -13,14 +14,20 @@ except:
 
 import siamese_model_words as siamese_model
 
-phoneMap_path = r'./data/phoneMap.pkl'
-suwan_model = r'./model/model60400.ckpt'
-language_model_path = r'./data/lang_mean_words.npy'
+current_directory = os.path.dirname(os.path.abspath(__file__))
+parent_directory = os.path.join(current_directory, os.pardir)
+data_directory = os.path.join(parent_directory, "data")
+model_directory = os.path.join(parent_directory, "model")
+
+
+phoneMap_path = os.path.join(data_directory, 'phoneMap.pkl') #r'./data/phoneMap.pkl'
+suwan_model = os.path.join(model_directory, 'model60400.ckpt') # r'./model/model60400.ckpt'
+language_model_path = os.path.join(data_directory, 'lang_mean_words.npy') #r'./data/lang_mean_words.npy'
 
 if __name__ == '__main__':
-    phoneMap_path = r'../../data/phoneMap.pkl'
-    suwan_model = r'../../model/model60400.ckpt'
-    language_model_path = r'../../data/lang_mean_words.npy'
+    phoneMap_path = os.path.join(data_directory, 'phoneMap.pkl') # r'../../data/phoneMap.pkl'
+    suwan_model = os.path.join(model_directory, 'model60400.ckpt') # r'../../model/model60400.ckpt'
+    language_model_path = os.path.join(data_directory, 'lang_mean_words.npy') #r'../../data/lang_mean_words.npy'
 
 with codecs.open(phoneMap_path, mode='rb') as phf:
     phoneMap = pickle.load(phf)
