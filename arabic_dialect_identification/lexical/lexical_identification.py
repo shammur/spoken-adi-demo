@@ -12,22 +12,18 @@ try:
 except:
    import pickle
 
-import siamese_model_words as siamese_model
+from ..utils import siamese_model_words as siamese_model
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
-parent_directory = os.path.join(current_directory, os.pardir)
-data_directory = os.path.join(parent_directory, "data")
-model_directory = os.path.join(parent_directory, "model")
+# parent_directory = os.path.join(current_directory, os.pardir)
+data_directory = os.path.join(current_directory, "data")
+model_directory = os.path.join(current_directory, "model")
 
 
 phoneMap_path = os.path.join(data_directory, 'phoneMap.pkl') #r'./data/phoneMap.pkl'
 suwan_model = os.path.join(model_directory, 'model60400.ckpt') # r'./model/model60400.ckpt'
 language_model_path = os.path.join(data_directory, 'lang_mean_words.npy') #r'./data/lang_mean_words.npy'
 
-if __name__ == '__main__':
-    phoneMap_path = os.path.join(data_directory, 'phoneMap.pkl') # r'../../data/phoneMap.pkl'
-    suwan_model = os.path.join(model_directory, 'model60400.ckpt') # r'../../model/model60400.ckpt'
-    language_model_path = os.path.join(data_directory, 'lang_mean_words.npy') #r'../../data/lang_mean_words.npy'
 
 with codecs.open(phoneMap_path, mode='rb') as phf:
     phoneMap = pickle.load(phf)
@@ -105,6 +101,9 @@ def identify_dialect(utterance):
 
 
 if __name__ == '__main__':
+    phoneMap_path = os.path.join(data_directory, 'phoneMap.pkl') # r'../../data/phoneMap.pkl'
+    suwan_model = os.path.join(model_directory, 'model60400.ckpt') # r'../../model/model60400.ckpt'
+    language_model_path = os.path.join(data_directory, 'lang_mean_words.npy') #r'../../data/lang_mean_words.npy'
     u1 = u"AlErby >m Al>kvr mA$yyn ArtfAE tkAlyf Al$Hn ArtfAE tkAlyf AlmEArD >h ElY mstwY AlwTn AlErby <rtfAE >sEAr Al<ElAnAt"
     print buck2utf8(u1)
     dialect = identify_dialect(u1)

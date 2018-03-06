@@ -10,9 +10,8 @@ The confidence scores are now normalized
 import sys
 import json
 import logging
-from arabic_dialect_identification import arabic_dialect_identification as adi
+from arabic_dialect_identification.lexical import lexical_identification
 
-from math import exp
 
 
 class LastNTokens(object):
@@ -29,11 +28,16 @@ class LastNTokens(object):
         if len(self.tokens) > self.n:
             self.tokens = self.tokens[-self.n:]
 
+
 token_list_10 = LastNTokens(10)
 
 
 def post_process_json(str):
     try:
+        # conf = {}
+        # if args.conf:
+        #     with open(args.conf) as f:
+        #         conf = yaml.safe_load(f)
         event = json.loads(str)
 
         if "result" in event:
@@ -42,7 +46,7 @@ def post_process_json(str):
             tokens = text.strip().split()
             token_list_10.add_tokens_list(tokens)
             utterance = ' '.join(token_list_10.get_n_tokens())
-            did_scores = adi.identify_dialect(utterance)
+            did_scores = lexical_identification.identify_dialect(utterance)
             event['result']['hypotheses'].append(did_scores)
 
         return json.dumps(event)
