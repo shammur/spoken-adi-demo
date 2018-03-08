@@ -31,18 +31,20 @@ with codecs.open(phoneMap_path, mode='rb') as phf:
 langList = [u'EGY', u'GLF', u'LAV', u'MSA', u'NOR']
 input_dim = 41657
 
-# init variables
-sess = tf.Session()
+lexical_graph = tf.Graph()
+with lexical_graph.as_default():
+    # init variables
+    sess = tf.Session()
 
-siamese = siamese_model.siamese(input_dim)
-global_step = tf.Variable(0, trainable=False)
-learning_rate = tf.train.exponential_decay(0.01, global_step,
-                                           5000, 0.99, staircase=True)
-train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(siamese.loss, global_step=global_step)
-saver = tf.train.Saver()
-sess.run(tf.global_variables_initializer())
+    siamese = siamese_model.siamese(input_dim)
+    global_step = tf.Variable(0, trainable=False)
+    learning_rate = tf.train.exponential_decay(0.01, global_step,
+                                               5000, 0.99, staircase=True)
+    train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(siamese.loss, global_step=global_step)
+    saver = tf.train.Saver()
+    sess.run(tf.global_variables_initializer())
 
-saver.restore(sess, suwan_model)  # saver_folder+'/model'+str(RESTORE_STEP)+'.ckpt'
+    saver.restore(sess, suwan_model)  # saver_folder+'/model'+str(RESTORE_STEP)+'.ckpt'
 
 # utterance = "انا مقلتش كدا خالص إمبارح"
 lang_mean_siam = np.load(language_model_path)
