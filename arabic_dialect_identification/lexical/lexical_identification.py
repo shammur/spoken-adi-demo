@@ -94,7 +94,7 @@ def identify_dialect(utterance):
 
             # convert from scores to probabilities for the purpose of visualization
             probabilities = softmax(utt_scores.ravel().tolist())
-            probabilities[4] = probabilities[4] * 0.1
+            probabilities[4] = probabilities[4]
             # probabilities = softmax(probabilities)
             return dict(zip(langList, probabilities))
 
