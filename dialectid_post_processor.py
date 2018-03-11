@@ -73,14 +73,14 @@ def post_process_json(json_str):
 
             # if it the audio file has more than 20 SECs which is 1024*600
             # 30,720 for (1) sec
-            if raw_file_size >= 614400:
+            if raw_file_size >= 640000:
                 memory_buffer = BytesIO()
                 # wave_obj = wave.open(memory_buffer, 'w')
                 with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
                     wave_obj.setnchannels(1)
                     wave_obj.setframerate(16000)
                     wave_obj.setsampwidth(2)
-                    raw_file_obj.seek(-1024 * 600, 2)
+                    raw_file_obj.seek(-640000, 2)
                     wave_obj.writeframes(raw_file_obj.read())
                     # wave_obj.close()
                 memory_buffer.flush()
@@ -95,7 +95,7 @@ def post_process_json(json_str):
                 of.setnchannels(1)
                 of.setframerate(16000)
                 of.setsampwidth(2)
-                raw_file_obj.seek(-30720 * segment_length, 2)
+                raw_file_obj.seek(-32000 * segment_length, 2)
                 of.writeframes(raw_file_obj.read())
 
                 #raw_file_obj.close()
