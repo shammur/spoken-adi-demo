@@ -44,6 +44,7 @@ sudo -H pip install ws4py==0.3.2
 sudo -H pip install pyyaml
 sudo -H pip install numpy
 sudo -H pip install tensorflow
+sudo -H pip install soundfile
 ```
 ### Kaldi Installation
 Clone the Kaldi as follows:
