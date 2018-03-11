@@ -57,7 +57,6 @@ def post_process_json(json_str):
             lexical_scores = lexical_identification.identify_dialect(utterance)
 
             out_dir = r'/var/spool/asr/nnet3sac'
-
             raw_file_path = os.path.join(out_dir, event['id'] + '.raw')
             raw_file_size = os.path.getsize(raw_file_path)
 
@@ -71,24 +70,21 @@ def post_process_json(json_str):
             time_stamp = ''.join([a,b,c.zfill(2)])
             raw_file_obj = open(raw_file_path, 'rb', os.O_NONBLOCK)
 
-            # if it the audio file has more than 20 SECs which is 1024*600
-            # 30,720 for (1) sec
-            if raw_file_size >= 640000:
+            # 16,000*2 byte for (1) sec
+            # for 20 SECs
+            if raw_file_size >= 16000*2*20:
                 memory_buffer = BytesIO()
-                # wave_obj = wave.open(memory_buffer, 'w')
+                # memory_buffer = os.path.join(debug_dir, "__"+ time_stamp + '.wav')
                 with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
                     wave_obj.setnchannels(1)
                     wave_obj.setframerate(16000)
                     wave_obj.setsampwidth(2)
                     raw_file_obj.seek(-640000, 2)
                     wave_obj.writeframes(raw_file_obj.read())
-                    # wave_obj.close()
                 memory_buffer.flush()
                 memory_buffer.seek(0)
                 acoustic_scores = acoustic_identification.dialect_estimation(memory_buffer)
                 # memory_buffer.close()
-
-
 
             wav_file_path = os.path.join(debug_dir, time_stamp + '.wav')
             with contextlib.closing(wave.open(wav_file_path, 'wb')) as of:
@@ -97,11 +93,6 @@ def post_process_json(json_str):
                 of.setsampwidth(2)
                 raw_file_obj.seek(-32000 * segment_length, 2)
                 of.writeframes(raw_file_obj.read())
-
-                #raw_file_obj.close()
-
-                # with open(wav_file_path, 'wb') as wav_file_obj:
-                #     wav_file_obj.write(memory_buffer.getvalue())
 
             lexical_weight = 0.3
             acoustic_weight = 0.7
