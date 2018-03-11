@@ -58,7 +58,7 @@ class nn:
         conv4 = self.conv_layer(conv3r,kernel_size,featdim,stride,depth,'conv4',shape_list)
         conv4r= tf.nn.relu(conv4)
         
-        print conv1
+        # print conv1
         
 
         
@@ -85,7 +85,7 @@ class nn:
         return tf.truncated_normal_initializer(stddev=stddev)
 
     def fc_layer(self, bottom, n_weight, name):
-        print( bottom.get_shape())
+        # print( bottom.get_shape())
         assert len(bottom.get_shape()) == 2
         n_prev_weight = bottom.get_shape()[1]
 
@@ -111,7 +111,7 @@ class nn:
         mask=tf.tile(mask, tf.stack([tf.shape(conv)[2],1])) #replicate make with depth size
         mask=tf.reshape(mask,[tf.shape(conv)[2], tf.shape(conv)[0], -1])
         mask = tf.transpose(mask,[1, 2, 0])
-        print mask
+        # print mask
         conv=tf.multiply(conv,mask)
         return conv
     

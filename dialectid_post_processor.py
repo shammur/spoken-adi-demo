@@ -11,11 +11,13 @@ import os
 import sys
 import json
 import logging
+import time
+import datetime
+import contextlib
 from io import BytesIO
 import wave
 from arabic_dialect_identification.lexical import lexical_identification
 from arabic_dialect_identification.acoustic import acoustic_identification
-
 
 
 class LastNTokens(object):
@@ -36,55 +38,87 @@ class LastNTokens(object):
 token_list_10 = LastNTokens(10)
 
 
-def post_process_json(str):
+def post_process_json(json_str):
     try:
         # conf = {}
         # if args.conf:
         #     with open(args.conf) as f:
         #         conf = yaml.safe_load(f)
-        event = json.loads(str)
+        event = json.loads(json_str)
 
         if "result" in event:
-            lexical_scores = {u'NOR': 0, u'MSA': 0, u'EGY': 0, u'LAV': 0, u'GLF': 0}
+            # lexical_scores = {u'NOR': 0, u'MSA': 0, u'EGY': 0, u'LAV': 0, u'GLF': 0}
             acoustic_scores = {u'NOR': 0, u'MSA': 0, u'EGY': 0, u'LAV': 0, u'GLF': 0}
             text = event['result']['hypotheses'][0]['transcript']
-
+            segment_length = event['segment-length']
             tokens = text.strip().split()
             token_list_10.add_tokens_list(tokens)
             utterance = ' '.join(token_list_10.get_n_tokens())
             lexical_scores = lexical_identification.identify_dialect(utterance)
 
-            raw_file = os.path.join(r'/var/spool/asr/nnet3sac', event['id']+'.raw')
-            raw_file_size = os.path.getsize(raw_file)
+            out_dir = r'/var/spool/asr/nnet3sac'
+
+            raw_file_path = os.path.join(out_dir, event['id'] + '.raw')
+            raw_file_size = os.path.getsize(raw_file_path)
+
+            debug_dir = os.path.join(out_dir, str(datetime.date.today()), event['id'])
+            try:
+                os.makedirs(debug_dir)
+            except OSError as e:
+                if not os.path.isdir(debug_dir):
+                    raise
+            a, b, c = str(time.time()).partition('.')
+            time_stamp = ''.join([a,b,c.zfill(2)])
+            raw_file_obj = open(raw_file_path, 'rb', os.O_NONBLOCK)
 
             # if it the audio file has more than 20 SECs which is 1024*600
-
+            # 30,720 for (1) sec
             if raw_file_size >= 614400:
-                buffer = BytesIO()
-                wave_file = wave.open(buffer, 'w')
-                wave_file.setnchannels(1)
-                wave_file.setframerate(16000)
-                wave_file.setsampwidth(2)
+                memory_buffer = BytesIO()
+                # wave_obj = wave.open(memory_buffer, 'w')
+                with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
+                    wave_obj.setnchannels(1)
+                    wave_obj.setframerate(16000)
+                    wave_obj.setsampwidth(2)
+                    raw_file_obj.seek(-1024 * 600, 2)
+                    wave_obj.writeframes(raw_file_obj.read())
+                    # wave_obj.close()
+                memory_buffer.flush()
+                memory_buffer.seek(0)
+                acoustic_scores = acoustic_identification.dialect_estimation(memory_buffer)
+                # memory_buffer.close()
 
-                file_object = open(raw_file, 'rb', os.O_NONBLOCK)
 
-                file_object.seek(-1024*600, 2)
-                wave_file.writeframes(file_object.read())
-                wave_file.close()
-                buffer.flush()
-                buffer.seek(0)
 
-                acoustic_scores = acoustic_identification.dialect_estimation(buffer)
+            wav_file_path = os.path.join(debug_dir, time_stamp + '.wav')
+            with contextlib.closing(wave.open(wav_file_path, 'wb')) as of:
+                of.setnchannels(1)
+                of.setframerate(16000)
+                of.setsampwidth(2)
+                raw_file_obj.seek(-30720 * segment_length, 2)
+                of.writeframes(raw_file_obj.read())
+
+                #raw_file_obj.close()
+
+                # with open(wav_file_path, 'wb') as wav_file_obj:
+                #     wav_file_obj.write(memory_buffer.getvalue())
+
             lexical_weight = 0.3
             acoustic_weight = 0.7
-            did_scores = {u'NOR': lexical_scores[u'NOR']*lexical_weight + acoustic_scores[u'NOR']*acoustic_weight,
-                          u'MSA': lexical_scores[u'MSA']*lexical_weight + acoustic_scores[u'MSA']*acoustic_weight,
-                          u'EGY': lexical_scores[u'EGY']*lexical_weight + acoustic_scores[u'EGY']*acoustic_weight,
-                          u'LAV': lexical_scores[u'LAV']*lexical_weight + acoustic_scores[u'LAV']*acoustic_weight,
-                          u'GLF': lexical_scores[u'GLF']*lexical_weight + acoustic_scores[u'GLF']*acoustic_weight,
-                          }
-            # event['result']['hypotheses'].append(lexical_scores)
-            # event['result']['hypotheses'].append(acoustic_scores)
+            did_scores = {u'NOR': lexical_scores[u'NOR'] * lexical_weight + acoustic_scores[u'NOR'] * acoustic_weight,
+                          u'MSA': lexical_scores[u'MSA'] * lexical_weight + acoustic_scores[u'MSA'] * acoustic_weight,
+                          u'EGY': lexical_scores[u'EGY'] * lexical_weight + acoustic_scores[u'EGY'] * acoustic_weight,
+                          u'LAV': lexical_scores[u'LAV'] * lexical_weight + acoustic_scores[u'LAV'] * acoustic_weight,
+                          u'GLF': lexical_scores[u'GLF'] * lexical_weight + acoustic_scores[u'GLF'] * acoustic_weight}
+
+            json_list = list()
+            json_list.append(text)
+            json_dict = {'lexical_score': lexical_scores, 'acoustic_score': acoustic_scores, 'final_score': did_scores}
+            json_list.append(json_dict)
+            text_file = os.path.join(debug_dir, time_stamp + '.json')
+            with open(text_file, mode='w') as json_obj:
+                json.dump(json_list, json_obj)
+
             event['result']['hypotheses'].append(did_scores)
 
         return json.dumps(event)
@@ -100,7 +134,7 @@ if __name__ == "__main__":
     lines = []
     while True:
         l = sys.stdin.readline()
-        if not l: break # EOF
+        if not l: break  # EOF
         if l.strip() == "":
             if len(lines) > 0:
                 result_json = post_process_json("".join(lines))

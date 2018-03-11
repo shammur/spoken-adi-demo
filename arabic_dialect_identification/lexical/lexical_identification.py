@@ -107,6 +107,6 @@ if __name__ == '__main__':
     suwan_model = os.path.join(model_directory, 'model60400.ckpt') # r'../../model/model60400.ckpt'
     language_model_path = os.path.join(data_directory, 'lang_mean_words.npy') #r'../../data/lang_mean_words.npy'
     u1 = u"AlErby >m Al>kvr mA$yyn ArtfAE tkAlyf Al$Hn ArtfAE tkAlyf AlmEArD >h ElY mstwY AlwTn AlErby <rtfAE >sEAr Al<ElAnAt"
-    print buck2utf8(u1)
+    # print buck2utf8(u1)
     dialect = identify_dialect(u1)
-    print dialect
+    # print dialect

@@ -174,4 +174,4 @@ if __name__=='__main__':
         buffer.flush()
         buffer.seek(0)
 
-    print dialect_estimation(buffer)
+    #print dialect_estimation(buffer)
