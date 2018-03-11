@@ -45,6 +45,7 @@ sudo -H pip install pyyaml
 sudo -H pip install numpy
 sudo -H pip install tensorflow
 sudo -H pip install soundfile
+sudo -H pip install librosa
 ```
 ### Kaldi Installation
 Clone the Kaldi as follows:
