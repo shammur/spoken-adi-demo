@@ -74,7 +74,6 @@ def post_process_json(json_str):
             # for 20 SECs
             if raw_file_size >= 16000*2*20:
                 memory_buffer = BytesIO()
-                # memory_buffer = os.path.join(debug_dir, "__"+ time_stamp + '.wav')
                 with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
                     wave_obj.setnchannels(1)
                     wave_obj.setframerate(16000)
@@ -84,6 +83,10 @@ def post_process_json(json_str):
                 memory_buffer.flush()
                 memory_buffer.seek(0)
                 acoustic_scores = acoustic_identification.dialect_estimation(memory_buffer)
+                memory_buffer.seek(0)
+                decision_file_path = os.path.join(debug_dir, time_stamp + '_20_.wav')
+                with open(decision_file_path, 'wb') as decObj:
+                    decObj.write(memory_buffer.read())
                 # memory_buffer.close()
 
             wav_file_path = os.path.join(debug_dir, time_stamp + '.wav')
@@ -103,7 +106,9 @@ def post_process_json(json_str):
                           u'GLF': lexical_scores[u'GLF'] * lexical_weight + acoustic_scores[u'GLF'] * acoustic_weight}
 
             json_list = list()
+
             json_list.append(text)
+            json_list.append(utterance)
             json_dict = {'lexical_score': lexical_scores, 'acoustic_score': acoustic_scores, 'final_score': did_scores}
             json_list.append(json_dict)
             text_file = os.path.join(debug_dir, time_stamp + '.json')
