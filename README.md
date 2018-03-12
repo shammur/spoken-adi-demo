@@ -44,6 +44,8 @@ sudo -H pip install ws4py==0.3.2
 sudo -H pip install pyyaml
 sudo -H pip install numpy
 sudo -H pip install tensorflow
+sudo -H pip install soundfile
+sudo -H pip install librosa
 ```
 ### Kaldi Installation
 Clone the Kaldi as follows:
@@ -134,6 +136,7 @@ git clone https://github.com/alumae/kaldi-gstreamer-server.git
 change directory to the directory you just cloned, and the run server as follows:
 ```bash
 python kaldigstserver/master_server.py --port=8888 [--certfile=] [--keyfile=]
+sudo python kaldigstserver/master_server.py --port=8888 --certfile=/home/disooqi/qcri_certificate.pem --keyfile=/home/disooqi/qcri_key.pem
 ```
 ### Runnning
 ```bash
