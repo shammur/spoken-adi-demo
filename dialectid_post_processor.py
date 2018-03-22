@@ -48,7 +48,7 @@ def post_process_json(json_str):
 
         if "result" in event:
             # lexical_scores = {u'NOR': 0, u'MSA': 0, u'EGY': 0, u'LAV': 0, u'GLF': 0}
-            acoustic_scores = {u'NOR': 0, u'MSA': 0, u'EGY': 0, u'LAV': 0, u'GLF': 0}
+            acoustic_scores = {u'NOR': 0.1, u'MSA': 0.225, u'EGY': 0.225, u'LAV': 0.225, u'GLF': 0.225}
             text = event['result']['hypotheses'][0]['transcript']
             segment_length = event['segment-length']
             tokens = text.strip().split()
