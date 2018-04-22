@@ -39,13 +39,13 @@ sudo apt install python-dbus
 virtualenv --system-site-packages <your_env_name> -p <path/to/python2.7>
 source <path/to/your/env>/bin/activate
 
-sudo -H pip install tornado
-sudo -H pip install ws4py==0.3.2
-sudo -H pip install pyyaml
-sudo -H pip install numpy
-sudo -H pip install tensorflow
-sudo -H pip install soundfile
-sudo -H pip install librosa
+[sudo -H] pip install tornado
+[sudo -H] pip install ws4py==0.3.2
+[sudo -H] pip install pyyaml
+[sudo -H] pip install numpy
+[sudo -H] pip install tensorflow
+[sudo -H] pip install soundfile
+[sudo -H] pip install librosa
 ```
 ### Kaldi Installation
 Clone the Kaldi as follows:
