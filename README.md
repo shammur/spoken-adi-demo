@@ -126,7 +126,7 @@ git clone https://github.com/disooqi/qmdis-post-processor-full.git
 3) edit `/opt/model/model.yaml` and assign the path to `dialectid_post_processor.py` to the variable `full-post-processor:` as
     follows and append it to the file:
 ```yaml
-full-post-processor: /the/path/to/dialectid_post_processor.py`
+full-post-processor: /the/path/to/dialectid_post_processor.py
 ```
 ### Setting up Kaldi Gstreamer Server
 clone 
