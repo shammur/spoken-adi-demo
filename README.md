@@ -150,7 +150,7 @@ Running Using SSL
 2) run worker with `wss://` instead of `ws://`
 3) run client with `wss://` instead of `ws://`
 
-
+# sudo python manage.py runserver --insecure 0.0.0.0:80
 ```bash
 git clone https://github.com/Kaljurand/dictate.js.git
 ```
