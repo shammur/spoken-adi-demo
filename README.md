@@ -118,8 +118,12 @@ sudo mkdir -p -m 777 /var/spool/asr/nnet3sac
 ```
 
 ### Setting up Full Post Processor (this repo)
-1) clone this repo
+0) Before cloning this repo please make sure `Git LFS` is insalled, use the following command to install it
+```bash
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
 ```
+1) clone this repo
+```bash
 git clone https://github.com/disooqi/qmdis-post-processor-full.git
 ```
 2) make sure that `dialectid_post_processor.py` module and its parent directories have execution permissions
@@ -150,7 +154,7 @@ Running Using SSL
 2) run worker with `wss://` instead of `ws://`
 3) run client with `wss://` instead of `ws://`
 
-# sudo python manage.py runserver --insecure 0.0.0.0:80
+sudo python manage.py runserver --insecure 0.0.0.0:80
 ```bash
 git clone https://github.com/Kaljurand/dictate.js.git
 ```
