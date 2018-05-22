@@ -121,6 +121,7 @@ sudo mkdir -p -m 777 /var/spool/asr/nnet3sac
 0) Before cloning this repo please make sure `Git LFS` is insalled, use the following command to install it
 ```bash
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+sudo apt-get install git-lfs
 ```
 1) clone this repo
 ```bash
