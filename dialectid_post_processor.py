@@ -72,6 +72,7 @@ def post_process_json(json_str):
 
             # 16,000*2 byte for (1) sec
             # for 20 SECs
+            # #SEC*framerate*samplewidth
             if raw_file_size >= 16000*2*20:
                 memory_buffer = BytesIO()
                 with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
