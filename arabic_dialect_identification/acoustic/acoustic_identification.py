@@ -9,7 +9,6 @@ import librosa
 from io import BytesIO
 import wave
 
-# import nn_model as nn_model_foreval
 try:
     from ..utils import nn_model as nn_model_foreval
 except:
