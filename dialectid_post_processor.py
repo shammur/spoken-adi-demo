@@ -17,7 +17,7 @@ import contextlib
 from io import BytesIO
 import wave
 from arabic_dialect_identification.lexical import lexical_identification
-from arabic_dialect_identification.acoustic import acoustic_identification
+from arabic_dialect_identification.acoustic import acoustic_identification2
 
 
 class LastNTokens(object):
@@ -72,6 +72,7 @@ def post_process_json(json_str):
 
             # 16,000*2 byte for (1) sec
             # for 20 SECs
+            # #SEC*framerate*samplewidth
             if raw_file_size >= 16000*2*20:
                 memory_buffer = BytesIO()
                 with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
@@ -82,7 +83,7 @@ def post_process_json(json_str):
                     wave_obj.writeframes(raw_file_obj.read())
                 memory_buffer.flush()
                 memory_buffer.seek(0)
-                acoustic_scores = acoustic_identification.dialect_estimation(memory_buffer)
+                acoustic_scores = acoustic_identification2.dialect_estimation(memory_buffer)
                 memory_buffer.seek(0)
                 decision_file_path = os.path.join(debug_dir, time_stamp + '_20_.wav')
                 with open(decision_file_path, 'wb') as decObj:

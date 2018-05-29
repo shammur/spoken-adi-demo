@@ -64,7 +64,7 @@ class nn:
         
         shape_list = tf.cast(shape_list, tf.float32)
         shape_list = tf.reshape(shape_list,[-1,1,1])
-        mean = tf.reduce_sum(conv4r,1,keep_dims=True)/shape_list
+        mean = tf.reduce_sum(conv4r,1,keepdims=True)/shape_list
         res1=tf.squeeze(mean,axis=1)
         
 
