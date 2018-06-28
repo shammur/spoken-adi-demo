@@ -1,4 +1,4 @@
-#!/home/disooqi/kgs_env/bin/python
+#!/home/qcri/kgs_env/bin/python
 __author__ = "disooqi"
 __date__ = "25-Feb-2018"
 '''
@@ -56,8 +56,9 @@ def post_process_json(json_str):
             utterance = ' '.join(token_list_10.get_n_tokens())
             lexical_scores = lexical_identification.identify_dialect(utterance)
 
-            out_dir = r'/var/spool/asr/nnet3sac'
-            raw_file_path = os.path.join(out_dir, event['id'] + '.raw')
+            raw_dir = r'/var/spool/asr/nnet3sac'
+            out_dir = r'/adi1/spool/asr/nnet3sac'
+            raw_file_path = os.path.join(raw_dir, event['id'] + '.raw')
             raw_file_size = os.path.getsize(raw_file_path)
 
             debug_dir = os.path.join(out_dir, str(datetime.date.today()), event['id'])
