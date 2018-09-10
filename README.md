@@ -7,6 +7,7 @@ This project is a part of QMDIS "QCRI-MIT Advanced Dialect Identification" syste
 This project is just the post processor script that is called after the full transcript result of the ASR system. You need to install Kaldi ASR and the its Gstreamer server first before you can use it.  
 
 Current Specs of https://dialectid.qcri.org/ Server
+---------------------------------------------------
 
 |    | Type                 | value                                     |
 |----|----------------------|-------------------------------------------|
