@@ -6,34 +6,33 @@ This project is a part of QMDIS "QCRI-MIT Advanced Dialect Identification" syste
 
 This project is just the post processor script that is called after the full transcript result of the ASR system. You need to install Kaldi ASR and the its Gstreamer server first before you can use it.  
 
-Server Hardware Specs of https://dialectid.qcri.org/
----------------------
-Architecture:          x86_64  
-CPU op-mode(s):        32-bit, 64-bit  
-Byte Order:            Little Endian  
-CPU(s):                16  
-Memory:                64 GiB   
-On-line CPU(s) list:   0-15  
-Thread(s) per core:    2  
-Core(s) per socket:    8  
-Socket(s):             1  
-NUMA node(s):          1  
-Vendor ID:             GenuineIntel  
-CPU family:            6  
-Model:                 63  
-Model name:            Intel(R) Xeon(R) CPU E5-2673 v3 @ 2.40GHz  
-Stepping:              2  
-CPU MHz:               2394.452  
-BogoMIPS:              4788.90  
-Virtualization:        VT-x  
-Hypervisor vendor:     Microsoft  
-Virtualization type:   full  
-L1d cache:             32K  
-L1i cache:             32K  
-L2 cache:              256K  
-L3 cache:              30720K  
-NUMA node0 CPU(s):     0-15  
-Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology cpuid pni pclmulqdq vmx ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm abm pti tpr_shadow vnmi ept vpid fsgsbase bmi1 avx2 smep bmi2 erms xsaveopt
+|    | Type                 | value                                     |
+|----|----------------------|-------------------------------------------|
+| 1  | Architecture:        | x86_64                                    |
+| 2  | CPU op-mode(s):      | 32-bit, 64-bit                            |
+| 3  | Byte Order:          | Little Endian                             |
+| 4  | CPU(s):              | 16                                        |
+| 5  | Memory:              | 64 GiB                                    |
+| 6  | On-line CPU(s) list: | 0-15                                      |
+| 7  | Thread(s) per core:  | 2                                         |
+| 8  | Core(s) per socket:  | 8                                         |
+| 9  | Socket(s):           | 1                                         |
+| 10 | NUMA node(s):        | 1                                         |
+| 11 | Vendor ID:           | GenuineIntel                              |
+| 12 | CPU family:          | 6                                         |
+| 13 | Model:               | 63                                        |
+| 14 | Model name:          | Intel(R) Xeon(R) CPU E5-2673 v3 @ 2.40GHz |
+| 15 | Stepping:            | 2                                         |
+| 16 | CPU MHz:             | 2394.452                                  |
+| 17 | BogoMIPS:            | 4788.90                                   |
+| 18 | Virtualization:      | VT-x                                      |
+| 19 | Hypervisor vendor:   | Microsoft                                 |
+| 20 | Virtualization type: | full                                      |
+| 21 | L1d cache:           | 32K                                       |
+| 22 | L1i cache:           | 32K                                       |
+| 23 | L2 cache:            | 256K                                      |
+| 24 | L3 cache:            | 30720K                                    |
+| 25 | NUMA node0 CPU(s):   | 0-15                                      |
 
 
 Installation
