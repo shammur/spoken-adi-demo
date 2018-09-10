@@ -8,10 +8,10 @@ This project is just the post processor script that is called after the full tra
 
 Server Hardware Specs of https://dialectid.qcri.org/
 ---------------------
-Architecture:          x86_64
-CPU op-mode(s):        32-bit, 64-bit
-Byte Order:            Little Endian
-CPU(s):                16
+Architecture:          x86_64  
+CPU op-mode(s):        32-bit, 64-bit  
+Byte Order:            Little Endian  
+CPU(s):                16  
 Memory:                64 GiB
 On-line CPU(s) list:   0-15
 Thread(s) per core:    2
