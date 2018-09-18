@@ -27,12 +27,13 @@ class LastNTokens(object):
         self.tokens = list()
 
     def get_n_tokens(self):
-        return self.tokens[-self.n:]
+        # return self.tokens[-self.n:]
+        return self.tokens[:]
 
     def add_tokens_list(self, tokens):
         self.tokens.extend(tokens)
-        if len(self.tokens) > self.n:
-            self.tokens = self.tokens[-self.n:]
+        # if len(self.tokens) > self.n:
+        #     self.tokens = self.tokens[-self.n:]
 
 
 token_list_10 = LastNTokens(10)
@@ -74,22 +75,22 @@ def post_process_json(json_str):
             # 16,000*2 byte for (1) sec
             # for 20 SECs
             # #SEC*framerate*samplewidth
-            if raw_file_size >= 16000*2*20:
-                memory_buffer = BytesIO()
-                with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
-                    wave_obj.setnchannels(1)
-                    wave_obj.setframerate(16000)
-                    wave_obj.setsampwidth(2)
-                    raw_file_obj.seek(-640000, 2)
-                    wave_obj.writeframes(raw_file_obj.read())
-                memory_buffer.flush()
-                memory_buffer.seek(0)
-                acoustic_scores = acoustic_identification2.dialect_estimation(memory_buffer)
-                memory_buffer.seek(0)
-                decision_file_path = os.path.join(debug_dir, time_stamp + '_20_.wav')
-                with open(decision_file_path, 'wb') as decObj:
-                    decObj.write(memory_buffer.read())
-                # memory_buffer.close()
+            #if raw_file_size >= 16000*2*20:
+            memory_buffer = BytesIO()
+            with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
+                wave_obj.setnchannels(1)
+                wave_obj.setframerate(16000)
+                wave_obj.setsampwidth(2)
+                #raw_file_obj.seek(-640000, 2)
+                wave_obj.writeframes(raw_file_obj.read())
+            memory_buffer.flush()
+            memory_buffer.seek(0)
+            acoustic_scores = acoustic_identification2.dialect_estimation(memory_buffer)
+            memory_buffer.seek(0)
+            decision_file_path = os.path.join(debug_dir, time_stamp + '_20_.wav')
+            with open(decision_file_path, 'wb') as decObj:
+                decObj.write(memory_buffer.read())
+            # memory_buffer.close()
 
             wav_file_path = os.path.join(debug_dir, time_stamp + '.wav')
             with contextlib.closing(wave.open(wav_file_path, 'wb')) as of:
