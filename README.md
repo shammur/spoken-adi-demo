@@ -6,6 +6,36 @@ This project is a part of QMDIS "QCRI-MIT Advanced Dialect Identification" syste
 
 This project is just the post processor script that is called after the full transcript result of the ASR system. You need to install Kaldi ASR and the its Gstreamer server first before you can use it.  
 
+Current Specs of https://dialectid.qcri.org/ Server
+---------------------------------------------------
+
+|    | Type                 | value                                     |
+|----|----------------------|-------------------------------------------|
+| 1  | Architecture:        | x86_64                                    |
+| 2  | CPU op-mode(s):      | 32-bit, 64-bit                            |
+| 3  | Byte Order:          | Little Endian                             |
+| 4  | CPU(s):              | 16                                        |
+| 5  | Memory:              | 64 GiB                                    |
+| 6  | On-line CPU(s) list: | 0-15                                      |
+| 7  | Thread(s) per core:  | 2                                         |
+| 8  | Core(s) per socket:  | 8                                         |
+| 9  | Socket(s):           | 1                                         |
+| 10 | NUMA node(s):        | 1                                         |
+| 11 | Vendor ID:           | GenuineIntel                              |
+| 12 | CPU family:          | 6                                         |
+| 13 | Model:               | 63                                        |
+| 14 | Model name:          | Intel(R) Xeon(R) CPU E5-2673 v3 @ 2.40GHz |
+| 15 | Stepping:            | 2                                         |
+| 16 | CPU MHz:             | 2394.452                                  |
+| 17 | BogoMIPS:            | 4788.90                                   |
+| 18 | Virtualization:      | VT-x                                      |
+| 19 | Hypervisor vendor:   | Microsoft                                 |
+| 20 | Virtualization type: | full                                      |
+| 21 | L1d cache:           | 32K                                       |
+| 22 | L1i cache:           | 32K                                       |
+| 23 | L2 cache:            | 256K                                      |
+| 24 | L3 cache:            | 30720K                                    |
+| 25 | NUMA node0 CPU(s):   | 0-15                                      |
 
 
 Installation
