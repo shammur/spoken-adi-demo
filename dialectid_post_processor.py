@@ -24,20 +24,24 @@ class LastNTokens(object):
     def __init__(self, n):
         # last number of token to be reserved
         self.n = n
+        self.session = None
         self.tokens = list()
 
     def get_n_tokens(self):
         # return self.tokens[-self.n:]
         return self.tokens[:]
 
-    def add_tokens_list(self, tokens):
-        self.tokens.extend(tokens)
+    def add_tokens_list(self, tokens, sessionid):
+        if self.session == sessionid:
+            self.tokens.extend(tokens)
+        else:
+            self.session = sessionid
+            self.tokens = tokens[:]
         # if len(self.tokens) > self.n:
         #     self.tokens = self.tokens[-self.n:]
 
 
 token_list_10 = LastNTokens(10)
-
 
 def post_process_json(json_str):
     try:
@@ -49,11 +53,12 @@ def post_process_json(json_str):
 
         if "result" in event:
             # lexical_scores = {u'NOR': 0, u'MSA': 0, u'EGY': 0, u'LAV': 0, u'GLF': 0}
-            acoustic_scores = {u'NOR': 0.1, u'MSA': 0.225, u'EGY': 0.225, u'LAV': 0.225, u'GLF': 0.225}
+            # acoustic_scores = {u'NOR': 0.1, u'MSA': 0.225, u'EGY': 0.225, u'LAV': 0.225, u'GLF': 0.225}
             text = event['result']['hypotheses'][0]['transcript']
             segment_length = event['segment-length']
             tokens = text.strip().split()
-            token_list_10.add_tokens_list(tokens)
+
+            token_list_10.add_tokens_list(tokens, event['id'])
             utterance = ' '.join(token_list_10.get_n_tokens())
             lexical_scores = lexical_identification.identify_dialect(utterance)
 
@@ -87,7 +92,7 @@ def post_process_json(json_str):
             memory_buffer.seek(0)
             acoustic_scores = acoustic_identification2.dialect_estimation(memory_buffer)
             memory_buffer.seek(0)
-            decision_file_path = os.path.join(debug_dir, time_stamp + '_20_.wav')
+            decision_file_path = os.path.join(debug_dir, time_stamp + '_plus_previous_.wav')
             with open(decision_file_path, 'wb') as decObj:
                 decObj.write(memory_buffer.read())
             # memory_buffer.close()
