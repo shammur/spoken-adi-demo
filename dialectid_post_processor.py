@@ -105,7 +105,7 @@ def post_process_json(json_str):
                 raw_file_obj.seek(-32000 * segment_length, 2)
                 of.writeframes(raw_file_obj.read())
 
-            lexical_weight = 1.0
+            lexical_weight = 0.0
             acoustic_weight = 1.0 - lexical_weight
             # weighted_lexical = {dialect: value * lexical_weight for dialect, value in lexical_scores.items()}
             # weighted_acoustic = {dialect: value * acoustic_weight for dialect, value in acoustic_scores.items()}
