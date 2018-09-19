@@ -121,8 +121,8 @@ sess3.run(tf.global_variables_initializer())
 ### Loading neural network
 current_directory = os.path.dirname(os.path.abspath(__file__))
 model_directory = os.path.join(current_directory, 'model')
-model_path = os.path.join(model_directory, 'model1284000.ckpt-1284000')
-# saver.restore(sess,'./model/model1284000.ckpt-1284000')
+model_path3 = os.path.join(model_directory, 'model1284000.ckpt-1284000')
+saver3.restore(sess3,model_path3)
 
 def softmax(x):
     """Compute softmax values for each sets of scores in x."""
