@@ -86,7 +86,7 @@ def post_process_json(json_str):
                 wave_obj.setnchannels(1)
                 wave_obj.setframerate(16000)
                 wave_obj.setsampwidth(2)
-                #raw_file_obj.seek(-640000, 2)
+                raw_file_obj.seek(0)
                 wave_obj.writeframes(raw_file_obj.read())
             memory_buffer.flush()
             memory_buffer.seek(0)
