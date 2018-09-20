@@ -97,15 +97,17 @@ def post_process_json(json_str):
                 decObj.write(memory_buffer.read())
             # memory_buffer.close()
 
-            wav_file_path = os.path.join(debug_dir, time_stamp + '.wav')
-            with contextlib.closing(wave.open(wav_file_path, 'wb')) as of:
-                of.setnchannels(1)
-                of.setframerate(16000)
-                of.setsampwidth(2)
-                raw_file_obj.seek(-32000 * segment_length, 2)
-                of.writeframes(raw_file_obj.read())
+            # the following snippet saves only the part of audio that corresponding to the segment length returned by
+            # by the ASR
+            # wav_file_path = os.path.join(debug_dir, time_stamp + '.wav')
+            # with contextlib.closing(wave.open(wav_file_path, 'wb')) as of:
+            #     of.setnchannels(1)
+            #     of.setframerate(16000)
+            #     of.setsampwidth(2)
+            #     raw_file_obj.seek(-32000 * segment_length, 2)
+            #     of.writeframes(raw_file_obj.read())
 
-            lexical_weight = 0.0
+            lexical_weight = 0.3
             acoustic_weight = 1.0 - lexical_weight
             # weighted_lexical = {dialect: value * lexical_weight for dialect, value in lexical_scores.items()}
             # weighted_acoustic = {dialect: value * acoustic_weight for dialect, value in acoustic_scores.items()}
