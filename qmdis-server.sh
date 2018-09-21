@@ -22,7 +22,7 @@ screen -S w$counter -p 0 -X stuff ". ~/kgs_env/bin/activate
 "
 screen -S w$counter -p 0 -X stuff "export GST_PLUGIN_PATH=~/gst-kaldi-nnet2-online/src
 "
-screen -S kgserver -p 0 -X stuff "cd kaldi-gstreamer-server/
+screen -S w$counter -p 0 -X stuff "cd kaldi-gstreamer-server/
 "
 screen -S w$counter -p 0 -X stuff "python kaldigstserver/worker.py -u wss://localhost:8888/worker/ws/speech -c /opt/model/model.yaml
 "
