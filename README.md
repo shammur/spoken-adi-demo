@@ -37,6 +37,16 @@ Current Specs of https://dialectid.qcri.org/ Server
 | 24 | L3 cache:            | 30720K                                    |
 | 25 | NUMA node0 CPU(s):   | 0-15                                      |
 
+Setting timezone
+----------------
+As QMDIS saves audio and json files within each session, It is usful to store the local time as well. To adjust the timezone according to the wanted place, we can do that through one of the following commands, 
+```bash
+tzselect
+```
+which opens a gui in terminal, or
+```bash
+sudo cp /usr/share/zoneinfo/Europe/London /etc/localtime
+```
 
 Installation
 ------------
