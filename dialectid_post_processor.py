@@ -62,25 +62,22 @@ def post_process_json(json_str):
             utterance = ' '.join(token_list_10.get_n_tokens())
             lexical_scores = lexical_identification.identify_dialect(utterance)
 
-            raw_dir = r'/var/spool/asr/nnet3sac'
             out_dir = r'/adi1/spool/asr/nnet3sac'
-            raw_file_path = os.path.join(raw_dir, event['id'] + '.raw')
-            raw_file_size = os.path.getsize(raw_file_path)
-
+            raw_file_path = os.path.join(out_dir, 'audio', event['id'] + '.raw')
             debug_dir = os.path.join(out_dir, str(datetime.date.today()), event['id'])
+
             try:
                 os.makedirs(debug_dir)
             except OSError as e:
                 if not os.path.isdir(debug_dir):
                     raise
+
             a, b, c = str(time.time()).partition('.')
-            time_stamp = ''.join([a,b,c.zfill(2)])
+            time_stamp = ''.join([a, b, c.zfill(2)])
             raw_file_obj = open(raw_file_path, 'rb', os.O_NONBLOCK)
 
             # 16,000*2 byte for (1) sec
-            # for 20 SECs
-            # #SEC*framerate*samplewidth
-            #if raw_file_size >= 16000*2*20:
+            # nBytes = SEC*framerate*samplewidth
             memory_buffer = BytesIO()
             with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
                 wave_obj.setnchannels(1)
@@ -91,34 +88,15 @@ def post_process_json(json_str):
             memory_buffer.flush()
             memory_buffer.seek(0)
             acoustic_scores = acoustic_identification2.dialect_estimation(memory_buffer)
-            memory_buffer.seek(0)
-            decision_file_path = os.path.join(debug_dir, time_stamp + '_plus_previous_.wav')
-            with open(decision_file_path, 'wb') as decObj:
-                decObj.write(memory_buffer.read())
-            # memory_buffer.close()
 
-            # the following snippet saves only the part of audio that corresponding to the segment length returned by
-            # by the ASR
-            # wav_file_path = os.path.join(debug_dir, time_stamp + '.wav')
-            # with contextlib.closing(wave.open(wav_file_path, 'wb')) as of:
-            #     of.setnchannels(1)
-            #     of.setframerate(16000)
-            #     of.setsampwidth(2)
-            #     raw_file_obj.seek(-32000 * segment_length, 2)
-            #     of.writeframes(raw_file_obj.read())
-
-            lexical_weight = 0.3
+            lexical_weight = 0.0
             acoustic_weight = 1.0 - lexical_weight
-            # weighted_lexical = {dialect: value * lexical_weight for dialect, value in lexical_scores.items()}
-            # weighted_acoustic = {dialect: value * acoustic_weight for dialect, value in acoustic_scores.items()}
-            did_scores = {u'NOR': lexical_scores[u'NOR'] * lexical_weight + acoustic_scores[u'NOR'] * acoustic_weight,
-                          u'MSA': lexical_scores[u'MSA'] * lexical_weight + acoustic_scores[u'MSA'] * acoustic_weight,
-                          u'EGY': lexical_scores[u'EGY'] * lexical_weight + acoustic_scores[u'EGY'] * acoustic_weight,
-                          u'LAV': lexical_scores[u'LAV'] * lexical_weight + acoustic_scores[u'LAV'] * acoustic_weight,
-                          u'GLF': lexical_scores[u'GLF'] * lexical_weight + acoustic_scores[u'GLF'] * acoustic_weight}
+            weighted_lexical = {dialect: value * lexical_weight for dialect, value in lexical_scores.items()}
+            weighted_acoustic = {dialect: value * acoustic_weight for dialect, value in acoustic_scores.items()}
 
+            did_scores = {key: weighted_lexical[key] + weighted_acoustic[key] for key in [u'EGY', u'GLF', u'LAV',
+                                                                                          u'MSA', u'NOR']}
             json_list = list()
-
             json_list.append(text)
             json_list.append(utterance)
             json_dict = {'lexical_score': lexical_scores, 'acoustic_score': acoustic_scores, 'final_score': did_scores}
