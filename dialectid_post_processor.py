@@ -89,7 +89,7 @@ def post_process_json(json_str):
             memory_buffer.seek(0)
             acoustic_scores = acoustic_identification2.dialect_estimation(memory_buffer)
 
-            lexical_weight = 0.0
+            lexical_weight = 0.3
             acoustic_weight = 1.0 - lexical_weight
             weighted_lexical = {dialect: value * lexical_weight for dialect, value in lexical_scores.items()}
             weighted_acoustic = {dialect: value * acoustic_weight for dialect, value in acoustic_scores.items()}
