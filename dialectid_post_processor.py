@@ -2,8 +2,8 @@
 __author__ = "disooqi"
 __date__ = "25-Feb-2018"
 '''
-#!/home/disooqi/kgs_env/bin/python
-#!/usr/bin/python
+#!/home/qcri/kgs_env/bin/python
+#### comment #!/usr/bin/python
 
 script that shows how to postprocess full results from the kaldi-gstreamer-worker, encoded as JSON.
 '''

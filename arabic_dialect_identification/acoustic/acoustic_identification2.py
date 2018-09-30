@@ -81,7 +81,6 @@ def feat_extract(y, sr, feat_type, n_fft_length=512, hop=160, vad=True, cmvn=Fal
         # sys.stdout.write('%s\r' % index)
         # sys.stdout.flush()
 
-
     tffilename = feat_type + '_fft' + str(n_fft_length) + '_hop' + str(hop)
     if vad:
         tffilename += '_vad'
@@ -96,7 +95,7 @@ def feat_extract(y, sr, feat_type, n_fft_length=512, hop=160, vad=True, cmvn=Fal
 
 
 # Feature extraction configuration
-FEAT_TYPE = 'logmel'
+FEAT_TYPE = 'mfcc'
 N_FFT = 400
 HOP = 160
 VAD = True
@@ -121,7 +120,7 @@ sess3.run(tf.global_variables_initializer())
 ### Loading neural network
 current_directory = os.path.dirname(os.path.abspath(__file__))
 model_directory = os.path.join(current_directory, 'model')
-model_path3 = os.path.join(model_directory, 'model1284000.ckpt-1284000')
+model_path3 = os.path.join(model_directory, 'model2768000.ckpt-2768000')
 saver3.restore(sess3,model_path3)
 
 def softmax(x):
