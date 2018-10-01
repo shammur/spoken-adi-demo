@@ -17,7 +17,7 @@ import contextlib
 from io import BytesIO
 import wave
 from arabic_dialect_identification.lexical import lexical_identification
-from arabic_dialect_identification.acoustic import acoustic_identification2
+from arabic_dialect_identification.acoustic import acoustic_identification3
 
 
 class LastNTokens(object):
@@ -87,7 +87,7 @@ def post_process_json(json_str):
                 wave_obj.writeframes(raw_file_obj.read())
             memory_buffer.flush()
             memory_buffer.seek(0)
-            acoustic_scores = acoustic_identification2.dialect_estimation(memory_buffer)
+            acoustic_scores = acoustic_identification3.dialect_estimation(memory_buffer)
 
             lexical_weight = 0.3
             acoustic_weight = 1.0 - lexical_weight
