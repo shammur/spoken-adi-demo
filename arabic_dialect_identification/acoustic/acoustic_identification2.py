@@ -95,7 +95,7 @@ def feat_extract(y, sr, feat_type, n_fft_length=512, hop=160, vad=True, cmvn=Fal
 
 
 # Feature extraction configuration
-FEAT_TYPE = 'mfcc'
+FEAT_TYPE = 'logmel'
 N_FFT = 400
 HOP = 160
 VAD = True
@@ -120,7 +120,7 @@ sess3.run(tf.global_variables_initializer())
 ### Loading neural network
 current_directory = os.path.dirname(os.path.abspath(__file__))
 model_directory = os.path.join(current_directory, 'model')
-model_path3 = os.path.join(model_directory, 'model2768000.ckpt-2768000')
+model_path3 = os.path.join(model_directory, 'model1284000.ckpt-1284000')
 saver3.restore(sess3,model_path3)
 
 def softmax(x):
@@ -139,19 +139,30 @@ def dialect_estimation(bytesIO_buffer):
 if __name__=='__main__':
     # c442bfff-9e1c-4af5-b7af-d22c0dd8988b
     raw_file_path = os.path.join(r'/var/spool/asr/nnet3sac', 'c442bfff-9e1c-4af5-b7af-d22c0dd8988b' + '.raw')
-    memory_buffer = BytesIO()
-    raw_file_obj = open(raw_file_path, 'rb', os.O_NONBLOCK)
-    with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
-        wave_obj.setnchannels(1)
-        wave_obj.setframerate(16000)
-        wave_obj.setsampwidth(2)
-        raw_file_obj.seek(-640000, 2)
-        wave_obj.writeframes(raw_file_obj.read())
-    memory_buffer.flush()
-    memory_buffer.seek(0)
+    raw_file_path = os.path.join(r'/home/disooqi/projects/log-mel_scale_filter_bank_energy', '1.wav')
 
-    acoustic_scores = dialect_estimation(memory_buffer)
-    print(acoustic_scores)
+    file_format = 'wav'
+    if file_format == 'wav':
+        y, sr = librosa.core.load(raw_file_path, sr=16000, mono=True, dtype='float')
+        feat, utt_label, utt_shape, tffilename = feat_extract(y, sr, FEAT_TYPE, N_FFT, HOP, VAD, CMVN, EXCLUDE_SHORT)
+        likelihood = emnet_validation.o1.eval({x: feat, s: utt_shape}, session=sess3)
+        probabilities = softmax(likelihood.ravel().tolist())
+        print(dict(zip(langList, probabilities)))
+
+    elif file_format == 'raw':
+        memory_buffer = BytesIO()
+        raw_file_obj = open(raw_file_path, 'rb', os.O_NONBLOCK)
+        with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
+            wave_obj.setnchannels(1)
+            wave_obj.setframerate(16000)
+            wave_obj.setsampwidth(2)
+            raw_file_obj.seek(-640000, 2)
+            wave_obj.writeframes(raw_file_obj.read())
+        memory_buffer.flush()
+        memory_buffer.seek(0)
+
+        acoustic_scores = dialect_estimation(memory_buffer)
+        print(acoustic_scores)
 
     # extracting mfcc for input wavfile
     # FILENAME = ['/home/disooqi/projects/code-switching/test_EGY_all/0f387df005d1270c37b1622d59b3ce69__70.69_88.66.wav']
