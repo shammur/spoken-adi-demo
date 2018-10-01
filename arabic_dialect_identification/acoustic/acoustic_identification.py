@@ -122,7 +122,7 @@ sess2.run(tf.global_variables_initializer())
 ### Loading neural network
 current_directory = os.path.dirname(os.path.abspath(__file__))
 model_directory = os.path.join(current_directory, 'model')
-model_path = os.path.join(model_directory, 'model1284000.ckpt-1284000')
+model_path = os.path.join(model_directory, 'model910000.ckpt')
 saver2.restore(sess2, model_path)
 
 def softmax(x):
