@@ -7,12 +7,13 @@ from io import BytesIO
 import wave
 import contextlib
 try:
-    from arabic_dialect_identification.acoustic.model2767000 import spk2vec_test24_you_trn_dev as nn_model_foreval
+    from ..utils import spk2vec_test24_you_trn_dev as nn_model_foreval
 except:
     from arabic_dialect_identification.utils import spk2vec_test24_you_trn_dev as nn_model_foreval
 
 
-langList = [u'EGY', u'GLF', u'LAV', u'MSA', u'NOR']
+dialects = [u'EGY', u'GLF', u'LAV', u'MSA', u'NOR']
+
 def cmvn_slide(feat, winlen=300, cmvn=False):  # feat : (length, dim) 2d matrix
     maxlen = np.shape(feat)[0]
     new_feat = np.empty_like(feat)
@@ -37,7 +38,7 @@ def cmvn_slide(feat, winlen=300, cmvn=False):  # feat : (length, dim) 2d matrix
     return new_feat
 
 
-def feat_extract(y, sr, feat_type, n_fft_length=512, hop=160, vad=True, cmvn=False, exclude_short=500):
+def feat_extract(y, sr, feat_type, n_fft_length=512, hop=160, vad=True, cmvn=None, exclude_short=500):
     #     filelist = np.loadtxt(filename,delimiter='\t',dtype='string',usecols=(0))
     #     utt_label = np.loadtxt(filename,delimiter='\t',dtype='int',usecols=(1))
 
@@ -100,17 +101,12 @@ def feat_extract(y, sr, feat_type, n_fft_length=512, hop=160, vad=True, cmvn=Fal
 
 
 # Feature extraction configuration
-FEAT_TYPE = 'mfcc'
-N_FFT = 400
-HOP = 160
-VAD = True
-CMVN = 'mv'
-EXCLUDE_SHORT=0
-IS_BATCHNORM = False
+
 IS_TRAINING = False
 INPUT_DIM = 40
-
+IS_BATCHNORM = False
 softmax_num = 5
+
 x = tf.placeholder(tf.float32, [None,None,40])
 y = tf.placeholder(tf.int32, [None])
 s = tf.placeholder(tf.int32, [None,2])
@@ -135,12 +131,19 @@ def softmax(x):
 
 def dialect_estimation(bytesIO_buffer):
     data, sample_rate = sf.read(bytesIO_buffer)
+    # feat_tools.feat_extract('filename.wav','mdcc',400,160,True,'m',0)
+    FEAT_TYPE = 'mfcc'
+    N_FFT = 400
+    HOP = 160
+    VAD = True
+    CMVN = 'm'
+    EXCLUDE_SHORT = 0
     feat, utt_label, utt_shape, tffilename = feat_extract(data, sample_rate, FEAT_TYPE, N_FFT, HOP, VAD, CMVN, EXCLUDE_SHORT)
     likelihood = emnet_validation.o1.eval({x: feat, s: utt_shape}, session=sess4)
 
     probabilities = softmax(likelihood.ravel().tolist())
 
-    return dict(zip(langList, probabilities))
+    return dict(zip(dialects, probabilities))
 
 
 def do_shuffle(feat, utt_label, utt_shape):
@@ -165,28 +168,53 @@ def do_shuffle(feat, utt_label, utt_shape):
 
 if __name__ == '__main__':
     # c442bfff-9e1c-4af5-b7af-d22c0dd8988b
-    raw_file_path = os.path.join(r'/var/spool/asr/nnet3sac', 'c442bfff-9e1c-4af5-b7af-d22c0dd8988b' + '.raw')
-    raw_file_path = os.path.join(r'/home/disooqi/projects/log-mel_scale_filter_bank_energy', '2.wav')
+    file_path = os.path.join(r'/var/spool/asr/nnet3sac', 'c442bfff-9e1c-4af5-b7af-d22c0dd8988b' + '.raw')
+    file_path = os.path.join(r'/home/disooqi/projects/log-mel_scale_filter_bank_energy', '2.wav')
 
     file_format = 'wav'
-    if file_format == 'wav':
-        y, sr = librosa.core.load(raw_file_path, sr=16000, mono=True, dtype='float')
-        feat, utt_label, utt_shape, tffilename = feat_extract(y, sr, FEAT_TYPE, N_FFT, HOP, VAD, CMVN, EXCLUDE_SHORT)
-        likelihood = emnet_validation.o1.eval({x: feat, s: utt_shape}, session=sess4)
-        probabilities = softmax(likelihood.ravel().tolist())
-        print(dict(zip(langList, probabilities)))
 
-    elif file_format == 'raw':
-        memory_buffer = BytesIO()
-        raw_file_obj = open(raw_file_path, 'rb', os.O_NONBLOCK)
-        with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
-            wave_obj.setnchannels(1)
-            wave_obj.setframerate(16000)
-            wave_obj.setsampwidth(2)
-            raw_file_obj.seek(-640000, 2)
-            wave_obj.writeframes(raw_file_obj.read())
-        memory_buffer.flush()
-        memory_buffer.seek(0)
+    import os
+    from collections import Counter
 
-        acoustic_scores = dialect_estimation(memory_buffer)
-        print(acoustic_scores)
+    reference = dict()
+    with open('/home/disooqi/projects/dialectid-evaluation/reference') as refs:
+        for i, line in enumerate(refs):
+            filename, label = line.strip().split()
+            reference[filename] = label
+
+    list_of_files = {}
+    correct = 0
+    total = 0
+
+    for (dirpath, dirnames, filenames) in os.walk('/home/disooqi/projects/dialectid-evaluation/wav'):
+        for i, filename in enumerate(filenames):
+            print i, filename
+            file_path = os.sep.join([dirpath, filename])
+
+            if file_format == 'wav':
+                y, sr = librosa.core.load(file_path, sr=16000, mono=True, dtype='float')
+                feat, utt_label, utt_shape, tffilename = feat_extract(y, sr, 'mfcc', 400, 160, True, 'm', 0)
+                likelihood = emnet_validation.o1.eval({x: feat, s: utt_shape}, session=sess4)
+                # probabilities = softmax(likelihood.ravel().tolist())
+                # print(dict(zip(langList, probabilities)))
+                dialect_index = np.argmax(likelihood)
+                if reference[os.path.splitext(filename)[0]] == dialects[dialect_index]:
+                    correct += 1
+                total += 1
+            elif file_format == 'raw':
+                memory_buffer = BytesIO()
+                raw_file_obj = open(file_path, 'rb', os.O_NONBLOCK)
+                with contextlib.closing(wave.open(memory_buffer, 'wb')) as wave_obj:
+                    wave_obj.setnchannels(1)
+                    wave_obj.setframerate(16000)
+                    wave_obj.setsampwidth(2)
+                    raw_file_obj.seek(-640000, 2)
+                    wave_obj.writeframes(raw_file_obj.read())
+                memory_buffer.flush()
+                memory_buffer.seek(0)
+
+                acoustic_scores = dialect_estimation(memory_buffer)
+                print(acoustic_scores)
+    else:
+        if total != 0:
+            print (correct * 100.0)/total
