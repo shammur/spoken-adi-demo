@@ -60,7 +60,7 @@ Installation
 * Python 2.7
 * In addition, you need Python 2.x bindings for gobject-introspection libraries, provided by the `python-gi`
 package on Debian and Ubuntu.
-* Tornado 
+* Tornado 4.5.2
 * ws4py (0.3.0 .. 0.3.2)
 * YAML
 * JSON
@@ -79,7 +79,7 @@ sudo apt install python-dbus
 virtualenv --system-site-packages <your_env_name> -p <path/to/python2.7>
 source <path/to/your/env>/bin/activate
 
-[sudo -H] pip install tornado
+[sudo -H] pip install tornado==4.5.2
 [sudo -H] pip install ws4py==0.3.2
 [sudo -H] pip install pyyaml
 [sudo -H] pip install numpy
