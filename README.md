@@ -73,6 +73,7 @@ sudo apt install python-gobject
 sudo apt install python-dbus
 ```
 
+Use `sudo -H` only when you installing in the global environment.
 ```bash
 virtualenv --system-site-packages <your_env_name> -p <path/to/python2.7>
 source <path/to/your/env>/bin/activate
