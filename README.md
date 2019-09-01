@@ -68,9 +68,7 @@ package on Debian and Ubuntu.
 
 ```bash
 sudo apt-get update
-sudo apt install python-pip
-sudo -H pip install -U pip
-sudo -H pip install virtualenv
+sudo apt install virtualenv
 sudo apt install python-gobject
 sudo apt install python-dbus
 ```
