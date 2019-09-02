@@ -73,7 +73,7 @@ sudo apt install python-gobject
 sudo apt install python-dbus
 ```
 
-Use `sudo -H` only when you installing in the global environment.
+Use `sudo -H` only when you installing in the global environment. Check requirements.txt in repo for libraries versions.
 ```bash
 virtualenv --system-site-packages <your_env_name> -p <path/to/python2.7>
 source <path/to/your/env>/bin/activate
@@ -81,7 +81,8 @@ source <path/to/your/env>/bin/activate
 [sudo -H] pip install tornado==4.5.2
 [sudo -H] pip install ws4py==0.3.2
 [sudo -H] pip install pyyaml
-[sudo -H] pip install numpy
+[sudo -H] pip install numpy # numpy dropped python2 try [sudo apt-get install python-numpy]
+											# scipy dropped python2 try [sudo apt-get install python-scipy]
 [sudo -H] pip install tensorflow
 [sudo -H] pip install soundfile
 [sudo -H] pip install librosa
@@ -171,6 +172,8 @@ git clone https://github.com/disooqi/qmdis-post-processor-full.git
     follows and append it to the file:
 ```yaml
 full-post-processor: /the/path/to/dialectid_post_processor.py
+or 
+post-processor: /the/path/to/dialectid_post_processor.py  #depending on yaml  
 ```
 ### Setting up Kaldi Gstreamer Server
 clone 
