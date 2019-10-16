@@ -187,7 +187,7 @@ sudo python kaldigstserver/master_server.py --port=8888 --certfile=/home/disooqi
 ```
 ### Runnning
 ```bash
-export GST_PLUGIN_PATH=~/gst-kaldi-nnet2-online/src
+export GST_PLUGIN_PATH=~/gst-kaldi-nnet2-online/src #change path to the respective path on your system
 cd kaldi-gstreamer-server
 python kaldigstserver/worker.py -u ws://localhost:8888/worker/ws/speech -c /opt/model/model.yaml
 ````
