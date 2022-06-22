@@ -18,4 +18,4 @@ SoundFile==0.10.1
 tornado==4.5.3
 ws4py==0.3.2
 tensorflow==1.4.1
-numpy==1.13.3
+numpy==1.22.0
