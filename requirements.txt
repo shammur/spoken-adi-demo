@@ -1,6 +1,6 @@
 audioread==2.1.5
 backports-abc==0.5
-certifi==2018.1.18
+certifi==2022.12.7
 cffi==1.11.5
 decorator==4.2.1
 joblib==0.11
